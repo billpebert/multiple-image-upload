@@ -18,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/image-upload', [FileUpload::class, 'createForm']);
 
+Route::get('/image-upload', [FileUpload::class, 'createForm']);
 Route::post('/image-upload', [FileUpload::class, 'fileUpload'])->name('imageUpload');
+Route::get('/image-delete-all', [FileUpload::class, 'deleteAllImages'])->name('truncate');

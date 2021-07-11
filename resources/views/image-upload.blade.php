@@ -8,46 +8,54 @@
 
     <title>Laravel Image Upload</title>
     <style>
-        .container {
+        .container.main {
             max-width: 500px;
         }
-        dl, ol, ul {
+
+        dl,
+        ol,
+        ul {
             margin: 0;
             padding: 0;
             list-style: none;
         }
+
         .imgPreview img {
             padding: 8px;
             max-width: 100px;
-        } 
+        }
+
+        div.alert {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container mt-5">
+    <div class="container main mt-5">
         <h3 class="text-center mb-5">Image Upload in Laravel</h3>
         <form action="{{route('imageUpload')}}" method="post" enctype="multipart/form-data">
             @csrf
             @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    <strong>{{ $message }}</strong>
-                </div>
+            <div class="alert alert-success">
+                <strong>{{ $message }}</strong>
+            </div>
             @endif
 
             @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li class="text-center"><strong>{{ $error }}</strong></li>
+                    @endforeach
+                </ul>
+            </div>
             @endif
 
             <div class="user-image mb-3 text-center">
                 <div class="imgPreview"> </div>
-            </div>            
+            </div>
 
             <div class="custom-file">
                 <input type="file" name="imageFile[]" class="custom-file-input" id="images" multiple="multiple">
@@ -57,9 +65,27 @@
             <button type="submit" name="submit" class="btn btn-primary btn-block mt-4">
                 Upload Images
             </button>
+
+            <a href="{{ route('truncate') }}" class="btn btn-danger btn-block mt-4">Delete All Photos</a>
         </form>
     </div>
-  
+
+    <div class="container">
+        <div class="row">
+            @forelse ($image as $i)
+            <div class="col-lg-3 col-sm-6 my-3">
+                <img src="{{ Storage::url($i) }}" alt="" width="250px" />
+            </div>
+            @empty
+            <div class="col-12 mt-5">
+                <div class="alert alert-warning">
+                    <strong>Upload to see photos here</strong>
+                </div>
+            </div>
+            @endforelse
+        </div>
+    </div>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script>
@@ -89,4 +115,5 @@
         });    
     </script>
 </body>
+
 </html>
