@@ -162,7 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         // Spatie\LaravelImageOptimizer\ImageOptimizerServiceProvider::class,
-        // Intervention\Image\ImageServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
         // CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
 
         /*
@@ -231,7 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         // 'ImageOptimizer' => Spatie\LaravelImageOptimizer\ImageOptimizerFacade::class,
-        // 'Image' => Intervention\Image\Facades\Image::class,
+        'Image' => Intervention\Image\Facades\Image::class,
         // 'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
 
     ],

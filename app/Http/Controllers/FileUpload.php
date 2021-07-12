@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\File;
+
 class FileUpload extends Controller
 {
     public function createForm()
@@ -41,13 +43,32 @@ class FileUpload extends Controller
             foreach ($req->file('imageFile') as $file) {
 
                 $name = $file->getClientOriginalName();
+                // $req_file = $req->file('imageFile');
                 // $extension = $file->extension();
                 $custom_name = date("dmy-His") . '-' . $name;
 
-                $path = $file->storeAs('/', $custom_name, 'public');
+                // $path = $file->storeAs('/', $custom_name, 'public');
+
+                //INTERVENTION IMAGE
+                $img = \Image::make($file);
+                // resize the image to a width of 300 and constrain aspect ratio (auto height)
+                $img->resize(
+                    700,
+                    null,
+                    function ($constraint) {
+                        $constraint->aspectRatio();
+                    }
+                );
+                // Folder in public must be created MANUALLY before uploading
+                $new_path = public_path('uploads/' . $custom_name);
+                $img->save($new_path);
+                // dd(storage_path('uploads/' . $custom_name));
+
+                // $store = Storage::putFileAs('public/', $resize);
+                // $url = Storage::url($store);
 
                 $store_photos = [
-                    'name' => $path
+                    'name' => $custom_name
                 ];
                 model_image::create($store_photos);
             }
@@ -59,10 +80,24 @@ class FileUpload extends Controller
 
     public function deleteAllImages()
     {
+        // dd(app_path());
+        $photos = model_image::pluck('name');
+
+        // delete folder in STORAGE
+        // Storage::deleteDirectory('public');
+
+        //delete folder in PUBLIC
+        foreach ($photos as $photo) {
+            if (File::exists(public_path('uploads/' . $photo))) {
+                File::delete(public_path('uploads/' . $photo));
+            } else {
+                model_image::truncate();
+                return back()->with('success', 'Folder tidak terbaca!');
+            }
+        }
+
         // truncate table
         model_image::truncate();
-        // delete folder
-        Storage::deleteDirectory('public');
 
         return back()->with('success', 'Semua gambar berhasil dihapus!');
     }

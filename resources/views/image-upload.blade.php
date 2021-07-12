@@ -74,7 +74,7 @@
         <div class="row">
             @forelse ($image as $i)
             <div class="col-lg-3 col-sm-6 my-3">
-                <img src="{{ Storage::url($i) }}" alt="" width="250px" />
+                <img src="{{ url('uploads/'.$i) }}" alt="{{ $i }}" width="250px" />
             </div>
             @empty
             <div class="col-12 mt-5">
