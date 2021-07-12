@@ -47,11 +47,12 @@ class FileUpload extends Controller
                 // $extension = $file->extension();
                 $custom_name = date("dmy-His") . '-' . $name;
 
+                // Store to laravel disk storage
                 // $path = $file->storeAs('/', $custom_name, 'public');
 
                 //INTERVENTION IMAGE
                 $img = \Image::make($file);
-                // resize the image to a width of 300 and constrain aspect ratio (auto height)
+                // resize the image to a width of 700 and constrain aspect ratio (auto height)
                 $img->resize(
                     700,
                     null,
@@ -62,10 +63,6 @@ class FileUpload extends Controller
                 // Folder in public must be created MANUALLY before uploading
                 $new_path = public_path('uploads/' . $custom_name);
                 $img->save($new_path);
-                // dd(storage_path('uploads/' . $custom_name));
-
-                // $store = Storage::putFileAs('public/', $resize);
-                // $url = Storage::url($store);
 
                 $store_photos = [
                     'name' => $custom_name
