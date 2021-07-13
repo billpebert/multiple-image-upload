@@ -14,7 +14,7 @@
 <body>
 
     <div class="container mt-5">
-        <h3 class="text-center mb-5">Upload your images</h3>
+        <h3 class="text-center mb-5">Upload your images here!</h3>
         <div class="row">
             <div class="col-4">
                 <form action="{{route('imageUpload')}}" method="post" enctype="multipart/form-data">
