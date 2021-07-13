@@ -26,17 +26,16 @@ class FileUpload extends Controller
         $req->validate(
             [
                 'imageFile' => 'required',
-                'imageFile.*' => 'image|mimes:jpeg,jpg,png|max:2048'
+                'imageFile.*' => 'image|mimes:jpeg,jpg,png|max:6144'
             ],
             [
                 'imageFile.required' => 'Mohon masukkan file gambar!',
                 'imageFile.*.mimes' => 'Format file tidak sesuai.',
-                'imageFile.*.max' => 'Ukuran maksimal 2MB!',
+                'imageFile.*.max' => 'Ukuran maksimal 6MB!',
                 'imageFile.*.image' => 'File bukan foto!',
                 'imageFile.*.uploaded' => 'File gagal diunggah.',
             ]
         );
-
 
         if ($req->hasfile('imageFile')) {
 
@@ -60,8 +59,10 @@ class FileUpload extends Controller
                         $constraint->aspectRatio();
                     }
                 );
-                // Folder in public must be created MANUALLY before uploading
-                $new_path = public_path('uploads/' . $custom_name);
+                // BEFORE UPLOAD
+                // Folder must be created MANUALLY in desired directory
+                // Check filesystems.php for the symbolic link
+                $new_path = storage_path('app/public/uploads/' . $custom_name);
                 $img->save($new_path);
 
                 $store_photos = [
@@ -69,7 +70,6 @@ class FileUpload extends Controller
                 ];
                 model_image::create($store_photos);
             }
-
             //Return must be outside of the foreach
             return back()->with('success', 'Gambar berhasil diunggah!');
         }
@@ -77,7 +77,6 @@ class FileUpload extends Controller
 
     public function deleteAllImages()
     {
-        // dd(app_path());
         $photos = model_image::pluck('name');
 
         // delete folder in STORAGE
@@ -85,11 +84,13 @@ class FileUpload extends Controller
 
         //delete folder in PUBLIC
         foreach ($photos as $photo) {
-            if (File::exists(public_path('uploads/' . $photo))) {
+            // Delete all files in public/uploads/ || Delete all files in storage/app/public/uploads
+            if (File::exists(public_path('uploads/' . $photo)) || File::exists(storage_path('app/public/uploads/' . $photo))) {
                 File::delete(public_path('uploads/' . $photo));
+                File::delete(storage_path('app/public/uploads/' . $photo));
             } else {
                 model_image::truncate();
-                return back()->with('success', 'Folder tidak terbaca!');
+                return back()->with('success', 'Sukses & Folder tidak terbaca!');
             }
         }
 

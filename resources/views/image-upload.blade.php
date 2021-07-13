@@ -5,86 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/app.css') }}" />
 
-    <title>Laravel Image Upload</title>
-    <style>
-        dl,
-        ol,
-        ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
+    <title>Multiple image upload</title>
 
-        .imgPreview img {
-            padding: 8px;
-            max-width: 100px;
-        }
-
-        div.alert {
-            text-align: center;
-        }
-
-        /* Image gallery css */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial;
-        }
-
-        /* The grid: Four equal columns that floats next to each other */
-        .column {
-            float: left;
-            width: 25%;
-            padding: 10px;
-        }
-
-        /* Style the images inside the grid */
-        .column img {
-            opacity: 1;
-            cursor: pointer;
-        }
-
-        .column img:hover {
-            opacity: 0.8;
-        }
-
-        /* Clear floats after the columns */
-        .row:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-
-        /* The expanding image container */
-        .container {
-            position: relative;
-            /* display: none; */
-        }
-
-        /* Expanding image text */
-        #imgtext {
-            padding-left: 10px;
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            color: white;
-            font-size: 12px;
-            word-wrap: break-word;
-        }
-
-        /* Closable button inside the expanded image */
-        .closebtn {
-            position: absolute;
-            padding-left: 10px;
-            color: white;
-            font-size: 35px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 
 <body>
@@ -131,7 +55,7 @@
                 <div class="container">
                     <span onclick="this.parentElement.style.display='none'" class="closebtn">&times;</span>
                     <img id="expandedImg" style="height:300px;" />
-                    <div id="imgtext" style="width: 25%;"></div>
+                    <div id="imgtext"></div>
                 </div>
             </div>
         </div>
@@ -142,8 +66,15 @@
         <div class="row">
             @forelse ($image as $gambar)
             <div class="col-lg-3 col-sm-6">
+
+                {{-- {{ dd(Storage::url('app/uploads')) }} --}}
                 <div class="column">
-                    <img src="{{ url('uploads/'.$gambar) }}" alt="{{ $gambar }}" width="250px"
+                    {{-- Show image from folder public/uploads --}}
+                    {{-- <img src="{{ url('uploads/'.$gambar) }}" alt="{{ $gambar }}" width="250px"
+                    onclick="myFunction(this);" /> --}}
+
+                    {{-- Show image from folder storage/app/public/uploads --}}
+                    <img src="{{ Storage::url('uploads/'.$gambar) }}" alt="{{ $gambar }}" width="250px"
                         onclick="myFunction(this);" />
                 </div>
             </div>
